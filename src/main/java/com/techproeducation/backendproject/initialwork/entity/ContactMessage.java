@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.security.auth.Subject;
 import javax.validation.constraints.Email;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -27,10 +28,9 @@ public class ContactMessage {
     String subject;
     @Column (name = "Message", nullable = false)
     String message;
+    @Column(updatable = false)
+    LocalDateTime localDateTime;
 
-   /* DateTimeFormatter newFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm", Locale.US);
-    String dateAndTime;
-    ZonedDateTime formattedDateAndTime = ZonedDateTime()*/
 
 
 }
