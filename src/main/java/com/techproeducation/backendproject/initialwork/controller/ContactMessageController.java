@@ -22,14 +22,9 @@ public class ContactMessageController {
 
 
     @PostMapping
-    public ContactMessage createContactMessage(@RequestBody ContactMessage contactMessage) {
-        return ContactMessageService.createContactMessage;
+    public ResponseEntity<ContactMessageDto> createContactMessage(@RequestBody ContactMessageDto contactMessageDto) {
+        ContactMessageDto createdContactMessageDto = contactMessageService.createContactMessage(contactMessageDto);
+        return ResponseEntity.ok(createdContactMessageDto);
     }
-
-    @GetMapping
-    public List<ContactMessage> getAllContactMessages() {
-        return ContactMessageService.findAllContactMessages;
-    }
-
 
 }

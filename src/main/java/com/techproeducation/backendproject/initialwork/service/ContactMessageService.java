@@ -1,15 +1,18 @@
 package com.techproeducation.backendproject.initialwork.service;
 
+import com.techproeducation.backendproject.initialwork.dto.ContactMessageDto;
 import com.techproeducation.backendproject.initialwork.entity.ContactMessage;
+import com.techproeducation.backendproject.initialwork.repository.ContactMessageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 @Service
-public class ContactMessageService {
+public abstract class ContactMessageService {
 
-    public static ContactMessage createContactMessage;
+    @Autowired
+    private ContactMessageRepository repository;
+    public ContactMessage createContactMessage(ContactMessage contactMessage) {
+        return repository.save(contactMessage);
+    }
 
-    public static List<ContactMessage> findAllContactMessages;
-
+    public abstract ContactMessageDto createContactMessage(ContactMessageDto contactMessageDto);
 }
