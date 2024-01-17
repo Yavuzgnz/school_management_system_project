@@ -2,6 +2,7 @@ package com.techproeducation.backendproject.initialwork.service.impl;
 
 import com.techproeducation.backendproject.initialwork.dto.ContactMessageDto;
 import com.techproeducation.backendproject.initialwork.entity.ContactMessageEntity;
+import com.techproeducation.backendproject.initialwork.exceptions.BadRequestException;
 import com.techproeducation.backendproject.initialwork.repository.ContactMessageRepository;
 import com.techproeducation.backendproject.initialwork.service.ContactMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactMessageServiceImpl extends ContactMessageService {
 
-    @Autowired
     private final ContactMessageRepository contactMessageRepository;
-
 
     @Autowired
     public ContactMessageServiceImpl(ContactMessageRepository contactMessageRepository) {
@@ -20,6 +19,9 @@ public class ContactMessageServiceImpl extends ContactMessageService {
     }
 
     public ContactMessageEntity createContactMessage(ContactMessageEntity contactMessageEntity) {
+        /*if (contactMessageEntity.getName() == null || contactMessageEntity.getEmail() == null) {
+            throw new BadRequestException("Name and email cannot be null");
+        }*/
         return contactMessageRepository.save(contactMessageEntity);
 
 
