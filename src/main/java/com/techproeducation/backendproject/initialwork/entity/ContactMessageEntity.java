@@ -21,17 +21,17 @@ public class ContactMessageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "Name", nullable = false)
-    @NotNull
+    @NotNull(message = "Name cannot be empty")
     String name;
     @Column(name = "Email", nullable = false)
     @Email
-    @NotNull
+    @NotNull(message = "Email cannot be empty")
     String email;
     @Column(name = "Subject", nullable = false)
-    @NotNull
+    @NotNull(message = "Subject cannot be empty")
     String subject;
     @Column(name = "Message", nullable = false)
-    @NotNull
+    @NotNull(message = "Message cannot be empty")
     String message;
     @Column(updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
