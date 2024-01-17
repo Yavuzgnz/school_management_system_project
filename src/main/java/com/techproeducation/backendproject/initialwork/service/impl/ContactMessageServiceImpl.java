@@ -1,8 +1,9 @@
-package com.techproeducation.backendproject.initialwork.service;
+package com.techproeducation.backendproject.initialwork.service.impl;
 
 import com.techproeducation.backendproject.initialwork.dto.ContactMessageDto;
 import com.techproeducation.backendproject.initialwork.entity.ContactMessageEntity;
 import com.techproeducation.backendproject.initialwork.repository.ContactMessageRepository;
+import com.techproeducation.backendproject.initialwork.service.ContactMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,4 +51,5 @@ public class ContactMessageServiceImpl extends ContactMessageService {
         // Map other fields if necessary
         return contactMessageDto;
     }*/
+    }
 }

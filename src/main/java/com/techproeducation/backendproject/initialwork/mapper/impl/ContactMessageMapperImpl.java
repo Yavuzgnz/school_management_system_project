@@ -1,7 +1,8 @@
-package com.techproeducation.backendproject.initialwork.mapper;
+package com.techproeducation.backendproject.initialwork.mapper.impl;
 
 import com.techproeducation.backendproject.initialwork.dto.ContactMessageDto;
 import com.techproeducation.backendproject.initialwork.entity.ContactMessageEntity;
+import com.techproeducation.backendproject.initialwork.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
