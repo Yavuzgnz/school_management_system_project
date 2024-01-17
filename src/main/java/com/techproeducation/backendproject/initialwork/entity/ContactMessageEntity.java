@@ -5,22 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.naming.Name;
 import javax.persistence.*;
-import javax.security.auth.Subject;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContactMessage {
+public class ContactMessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
