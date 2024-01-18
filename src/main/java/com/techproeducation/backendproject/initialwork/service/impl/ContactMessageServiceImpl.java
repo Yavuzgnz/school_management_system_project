@@ -4,6 +4,10 @@ import com.techproeducation.backendproject.initialwork.entity.ContactMessageEnti
 import com.techproeducation.backendproject.initialwork.repository.ContactMessageRepository;
 import com.techproeducation.backendproject.initialwork.service.ContactMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +35,13 @@ public class ContactMessageServiceImpl implements ContactMessageService {
                 .collect(Collectors.toList());*/
     }
 
+    @Override
+    public Page<ContactMessageEntity> getAllMessagesPage(int page, int size, String sort, Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort));
+        return contactMessageRepository.findAll(pageable);
+    }
+
+    @Override
     public ContactMessageEntity createContactMessage(ContactMessageEntity contactMessageEntity) {
         /*if (contactMessageEntity.getName() == null || contactMessageEntity.getEmail() == null) {
             throw new BadRequestException("Name and email cannot be null");

@@ -5,6 +5,8 @@ import com.techproeducation.backendproject.initialwork.entity.ContactMessageEnti
 import com.techproeducation.backendproject.initialwork.mapper.Mapper;
 import com.techproeducation.backendproject.initialwork.service.ContactMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,17 @@ public class ContactMessageController {
     public List<ContactMessageDto> getAllContactMessage() {
         List<ContactMessageEntity> allContactMessage = contactMessageService.findAll();
         return allContactMessage.stream().map(contactMessageMapper::mapTo).collect(Collectors.toList());
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<ContactMessageDto>> getAllMessages(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sort") String sort,
+            @RequestParam("direction")Sort.Direction direction) {
+        Page<ContactMessageEntity> contactMessageEntities = contactMessageService.getAllMessagesPage(page, size, sort, direction);
+        Page<ContactMessageDto> contactMessageDtos = contactMessageEntities.map(contactMessageMapper::mapTo); // convert entities to DTOs
+        return ResponseEntity.ok(contactMessageDtos);
     }
 
 }
