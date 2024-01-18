@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/contactMessage")
 public class ContactMessageController {
@@ -28,6 +31,12 @@ public class ContactMessageController {
         ContactMessageEntity contactMessageEntity = contactMessageMapper.mapFrom(contactMessageDto);
         ContactMessageEntity savedContactMessageEntity = contactMessageService.createContactMessage(contactMessageEntity);
         return ResponseEntity.ok(contactMessageMapper.mapTo(savedContactMessageEntity));
+    }
+
+    @GetMapping
+    public List<ContactMessageDto> getAllContactMessage() {
+        List<ContactMessageEntity> allContactMessage = contactMessageService.findAll();
+        return allContactMessage.stream().map(contactMessageMapper::mapTo).collect(Collectors.toList());
     }
 
 }

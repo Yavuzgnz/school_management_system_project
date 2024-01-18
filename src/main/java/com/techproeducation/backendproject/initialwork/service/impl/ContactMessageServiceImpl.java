@@ -1,15 +1,16 @@
 package com.techproeducation.backendproject.initialwork.service.impl;
 
-import com.techproeducation.backendproject.initialwork.dto.ContactMessageDto;
 import com.techproeducation.backendproject.initialwork.entity.ContactMessageEntity;
-import com.techproeducation.backendproject.initialwork.exceptions.BadRequestException;
 import com.techproeducation.backendproject.initialwork.repository.ContactMessageRepository;
 import com.techproeducation.backendproject.initialwork.service.ContactMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class ContactMessageServiceImpl extends ContactMessageService {
+public class ContactMessageServiceImpl implements ContactMessageService {
 
     private final ContactMessageRepository contactMessageRepository;
 
@@ -18,11 +19,27 @@ public class ContactMessageServiceImpl extends ContactMessageService {
         this.contactMessageRepository = contactMessageRepository;
     }
 
+    @Override
+    public List<ContactMessageEntity> findAll() {
+        return new ArrayList<>(contactMessageRepository.findAll());
+
+        // alternative
+        /*return StreamSupport.stream(contactMessageRepository
+                        .findAll()
+                        .spliterator(),
+                        false)
+                .collect(Collectors.toList());*/
+    }
+
     public ContactMessageEntity createContactMessage(ContactMessageEntity contactMessageEntity) {
         /*if (contactMessageEntity.getName() == null || contactMessageEntity.getEmail() == null) {
             throw new BadRequestException("Name and email cannot be null");
         }*/
         return contactMessageRepository.save(contactMessageEntity);
+    }
+
+
+
 
 
     // manual DTO but I used ModelMapper
@@ -53,5 +70,4 @@ public class ContactMessageServiceImpl extends ContactMessageService {
         // Map other fields if necessary
         return contactMessageDto;
     }*/
-    }
 }
