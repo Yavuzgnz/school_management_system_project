@@ -7,15 +7,23 @@ import com.project.schoolmanagment.payload.mappers.UserMapper;
 import com.project.schoolmanagment.payload.messages.ErrorMessages;
 import com.project.schoolmanagment.payload.messages.SuccessMessages;
 import com.project.schoolmanagment.payload.request.user.UserRequest;
+import com.project.schoolmanagment.payload.request.user.UserRequestWithoutPassword;
+import com.project.schoolmanagment.payload.response.abstracts.BaseUserResponse;
 import com.project.schoolmanagment.payload.response.businnes.ResponseMessage;
 import com.project.schoolmanagment.payload.response.user.UserResponse;
 import com.project.schoolmanagment.repository.user.UserRepository;
+import com.project.schoolmanagment.service.helper.MethodHelper;
 import com.project.schoolmanagment.service.helper.PageableHelper;
 import com.project.schoolmanagment.service.validator.UniquePropertyValidator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +35,7 @@ public class UserService {
   private final UserMapper userMapper;
   private final UserRoleService userRoleService;
   private final PageableHelper pageableHelper;
+  private final MethodHelper methodHelper;
 
   public ResponseMessage<UserResponse> saveUser(UserRequest userRequest, String userRole) {
     //we need a validator for unique props.
@@ -69,5 +78,61 @@ public class UserService {
     return userRepository.findByUserByRole(userRole,pageable)
         //map entity to response DTO
         .map(userMapper::mapUserToUserResponse);
+  }
+
+  public ResponseMessage<BaseUserResponse> getUserById(Long userId) {
+    //need to check if user exist with this id
+    User user = userRepository.findById(userId).orElseThrow(()->
+        new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,userId)));
+    
+    return ResponseMessage.<BaseUserResponse>builder()
+        .message(SuccessMessages.USER_FOUND)
+        .object(userMapper.mapUserToUserResponse(user))
+        .httpStatus(HttpStatus.OK)
+        .build();
+    
+  }
+
+  public List<UserResponse> getUserByName(String userName) {    
+    return userRepository.getUserByNameContaining(userName)
+        .stream()
+        .map(userMapper::mapUserToUserResponse)
+        .collect(Collectors.toList());   
+  }
+
+  public String updateUser(UserRequestWithoutPassword userRequest,
+      HttpServletRequest request) {
+    
+    String userName = (String) request.getHeader("username");    
+    User user = userRepository.findByUsername(userName);    
+    //we need to check if user is builtIn
+    methodHelper.checkBuiltIn(user);
+    
+    //uniqueness control
+    uniquePropertyValidator.checkUniqueProperties(user,userRequest);
+    //classic mappings instead of builder mappers
+    user.setName(userRequest.getName());
+    user.setSurname(userRequest.getSurname());
+    user.setUsername(userRequest.getUsername());
+    user.setBirthDay(userRequest.getBirthDay());
+    user.setBirthPlace(userRequest.getBirthPlace());
+    user.setEmail(userRequest.getEmail());
+    user.setPhoneNumber(userRequest.getPhoneNumber());
+    user.setGender(userRequest.getGender());
+    user.setSsn(userRequest.getSsn());
+    
+    userRepository.save(user);
+    return SuccessMessages.USER_UPDATE;
+  }
+
+  public ResponseMessage<BaseUserResponse> updateAdminDeanViceDeanByAdmin(Long userId,
+      UserRequest userRequest) {
+       
+    //check user if really exist
+    User user = methodHelper.isUserExist(userId);
+    //check user is built in
+    methodHelper.checkBuiltIn(user);
+    
+    
   }
 }
